@@ -235,9 +235,12 @@ export function aggregateWeeks(activities: ActivityRow[], weeks: string[]): Week
     const w = weekStart(a.occurred_on);
     const bucket = map.get(w);
     if (!bucket) continue;
-    const key = (["transport", "energy", "food"] as const).includes(a.category as Category)
-      ? (a.category as "transport" | "energy" | "food")
-      : "other";
+    const known = ["transport", "energy", "food"];
+    const key = (known.includes(a.category) ? a.category : "other") as
+      | "transport"
+      | "energy"
+      | "food"
+      | "other";
     bucket[key] += Number(a.co2e);
     bucket.total += Number(a.co2e);
   }
